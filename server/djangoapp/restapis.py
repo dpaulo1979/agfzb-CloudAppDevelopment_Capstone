@@ -48,7 +48,7 @@ def get_request(url, **kwargs):
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
     return json_data
-    
+
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
 
@@ -96,7 +96,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
             review_obj = DealerReview(dealership=dealer_doc["dealership"], name=dealer_doc["name"], purchase=dealer_doc["purchase"],
                                       review=dealer_doc["review"], purchase_date=dealer_doc["purchase_date"], car_make=dealer_doc["car_make"],
                                       car_model=dealer_doc["car_model"], car_year=dealer_doc["car_year"], id=dealer_doc["id"])
-            #review_obj.sentiment = analyze_review_sentiments(review_obj.review)                          
+            review_obj.sentiment = analyze_review_sentiments(review_obj.review)                          
             results.append(review_obj)
     return results    
 
