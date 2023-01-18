@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
-# from .models import related models
+from .models import CarModel
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -113,15 +113,12 @@ def add_review(request, dealer_id):
     if request.method == "GET":
         context = {} 
         context['dealer_id'] = dealer_id       
+        context['cars'] = CarModel.objects.filter(dealer_id=dealer_id).order_by('name')[:10]
         return render(request, 'djangoapp/add_review.html', context)
 
     elif request.method == "POST":
-
-        user = request.user
-        review = request.POST['review']
-        print ('###### '+review)
-        print ('###### '+user.first_name + ' ' + user.last_name )
-
+        
+        review = request.POST['review']        
 
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/22314e01-a3d1-4665-8935-68d4a7f703ab/car/post_review"
 
@@ -129,7 +126,7 @@ def add_review(request, dealer_id):
         review["time"] = datetime.utcnow().isoformat()
         review["dealership"] = dealer_id
         review["review"] = review
-        review["name"] = user.first_name + ' ' + user.last_name  
+        review["name"] = 'Test Name'  
         review["purchase_date"] = "02/16/2021"
         review["car_make"] = "BMW"
         review["car_model"] = "Car"
@@ -137,6 +134,9 @@ def add_review(request, dealer_id):
 
         json_payload = {}
         json_payload["review"] = review
+
+        print ('**** ', json_payload)
+
         post_request(url, json_payload, dealerId=dealer_id)
 
         return redirect("djangoapp:dealer_details", dealer_id=dealer_id)

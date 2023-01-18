@@ -50,18 +50,25 @@
 
     <!--Add review form here -->
     <br/>
-    <h4>Add a review</h4>
-    <br/>
-    Enter the review content:
-    <form action="{% url 'djangoapp:add_review' dealer_id%}" method="post">
-        {% csrf_token %}        
-        <textarea id="review" name="review" rows="2" cols="50" required></textarea><br/>
-        <input type="checkbox" name="purchase" id="purchase">
-        <label for="purchase">Has purchased the car from a Best Cars Dealership?</label><br />
-        <label for="purchasedate">Select you purchase date:</label><br />
-        <input type="text" name="purchasedate" id="purchasedate"><br /><br />    
-        <button class="btn btn-primary" type="submit">Submit</button>         
-    </form>
+    <div style="margin-left:45px">
+        <h4>Add a review</h4>
+        <br/>
+        Enter the review content:
+        <form action="{% url 'djangoapp:add_review' dealer_id%}" method="post">
+            {% csrf_token %}        
+            <textarea id="review" name="review" rows="2" cols="50" required></textarea><br/>
+            <input type="checkbox" name="purchase" id="purchase">
+            <label for="purchase">Has purchased the car from a Best Cars Dealership?</label><br />
+            <select name="car" id="car" required>
+                {% for car in cars %}
+                    <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
+                {% endfor %}
+        </select><br />
+            <label for="purchasedate">Select you purchase date:</label><br />
+            <input type="text" name="purchasedate" id="purchasedate"><br /><br />    
+            <button class="btn btn-primary" type="submit">Submit</button>         
+        </form>
+    </div>
     </body>
 
     <script type="text/javascript">
