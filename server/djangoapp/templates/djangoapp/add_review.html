@@ -11,6 +11,64 @@
 
 </head>
     <body>
+    <!--Add a nav bar here -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Best Cars Dealerships</a>                
+            </div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="about">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact">Contact Us</a>
+                </li>                
+            </ul>    
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
     <!--Add review form here -->
+    <br/>
+    <h4>Add a review</h4>
+    <br/>
+    Enter the review content:
+    <form action="{% url 'djangoapp:add_review' dealer_id%}" method="post">
+        {% csrf_token %}        
+        <textarea id="review" name="review" rows="2" cols="50" required></textarea><br/>
+        <input type="checkbox" name="purchase" id="purchase">
+        <label for="purchase">Has purchased the car from a Best Cars Dealership?</label><br />
+        <label for="purchasedate">Select you purchase date:</label>
+        <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate">    
+        <button class="btn btn-primary" type="submit">Submit</button>
+         <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+    </form>
     </body>
+
+    <script type="text/javascript">
+        $('.date-own').datepicker({
+           format: 'mm/dd/yyyy'
+         });
+    </script>
+
 </html>

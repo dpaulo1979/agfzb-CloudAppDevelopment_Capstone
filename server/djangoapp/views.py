@@ -104,25 +104,32 @@ def get_dealer_details(request, dealer_id):
         # Get reviews from the URL
         review_list = get_dealer_reviews_from_cf(url, dealer_id=dealer_id)
         context['review_list'] = review_list
+        context['dealer_id'] = dealer_id
         return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
 def add_review(request, dealer_id):
 
-    url = "https://us-south.functions.appdomain.cloud/api/v1/web/22314e01-a3d1-4665-8935-68d4a7f703ab/car/post_review"
+    if request.method == "GET":
+        context = {} 
+        context['dealer_id'] = dealer_id       
+        return render(request, 'djangoapp/add_review.html', context)
 
-    review = {}
-    review["time"] = datetime.utcnow().isoformat()
-    review["dealership"] = dealer_id
-    review["review"] = "This is a great car dealer"
-    review["name"] = "Upkar Lidder"    
-    review["purchase_date"] = "02/16/2021"
-    review["car_make"] = "BMW"
-    review["car_model"] = "Car"
-    review["car_year"] = 2021
+    elif request.method == "POST":
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/22314e01-a3d1-4665-8935-68d4a7f703ab/car/post_review"
 
-    json_payload = {}
-    json_payload["review"] = review
-    post_request(url, json_payload, dealerId=dealer_id)
+        review = {}
+        review["time"] = datetime.utcnow().isoformat()
+        review["dealership"] = dealer_id
+        review["review"] = "This is a great car dealer"
+        review["name"] = "Upkar Lidder"    
+        review["purchase_date"] = "02/16/2021"
+        review["car_make"] = "BMW"
+        review["car_model"] = "Car"
+        review["car_year"] = 2021
 
-    return HttpResponse("Success")
+        json_payload = {}
+        json_payload["review"] = review
+        post_request(url, json_payload, dealerId=dealer_id)
+
+        return HttpResponse("Success")
