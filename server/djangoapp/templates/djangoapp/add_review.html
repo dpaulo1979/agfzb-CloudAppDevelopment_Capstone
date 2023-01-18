@@ -63,7 +63,7 @@
                 {% for car in cars %}
                     <option selected value={{car.id}}>{{car.name}}-{{car.make.name}}-{{ car.year|date:"Y" }}</option>
                 {% endfor %}
-        </select><br />
+            </select><br />
             <label for="purchasedate">Select you purchase date:</label><br />
             <input type="text" name="purchasedate" id="purchasedate"><br /><br />    
             <button class="btn btn-primary" type="submit">Submit</button>         
